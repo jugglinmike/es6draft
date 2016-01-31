@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -49,7 +50,7 @@ final class Test262Info extends TestInfo {
         yamlContentPattern = Pattern.compile(fileHeader + yamlDescriptor);
     }
 
-    private String testName, description, errorType;
+    private String testName, description, errorType, errorStage;
     private List<String> includes = Collections.emptyList();
     private List<String> features = Collections.emptyList();
     private boolean onlyStrict, noStrict, negative, async, module, raw;
@@ -293,7 +294,8 @@ final class Test262Info extends TestInfo {
         this.description = desc.getDescription();
         this.includes = desc.getIncludes();
         this.features = desc.getFeatures();
-        this.errorType = desc.getNegative();
+        this.errorType = desc.getErrorType();
+        this.errorStage = desc.getErrorStage();
         this.negative = desc.getNegative() != null;
         if (!desc.getFlags().isEmpty()) {
             if (!lenient) {
@@ -320,7 +322,9 @@ final class Test262Info extends TestInfo {
         private List<String> includes = Collections.emptyList();
         private List<String> flags = Collections.emptyList();
         private List<String> features = Collections.emptyList();
-        private String negative;
+        private HashMap<String, String> negative;
+        private String errorStage;
+        private String errorType;
         private String es5id;
         private String es6id;
         private String bestPractice;
@@ -366,11 +370,21 @@ final class Test262Info extends TestInfo {
             this.features = features;
         }
 
-        public String getNegative() {
+        public HashMap<String, String> getNegative() {
             return negative;
         }
 
-        public void setNegative(String negative) {
+        public String getErrorStage() {
+            return errorStage;
+        }
+
+        public String getErrorType() {
+            return errorType;
+        }
+
+        public void setNegative(HashMap<String, String> negative) {
+            this.errorStage = negative.get("stage");
+            this.errorType = negative.get("type");
             this.negative = negative;
         }
 
