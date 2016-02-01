@@ -144,16 +144,22 @@ public final class Test262Web {
             return;
         }
 
-        final String preamble;
+        String preamble;
         if (test.isRaw() || test.isModule()) {
             preamble = "";
             preambleLines = 0;
-        } else if (isStrictTest) {
-            preamble = "\"use strict\";\nvar strict_mode = true;\n";
-            preambleLines = 2;
         } else {
-            preamble = "//\"use strict\";\nvar strict_mode = false;\n";
+            if (isStrictTest) {
+                preamble = "\"use strict\";\nvar strict_mode = true;\n";
+            } else {
+                preamble = "//\"use strict\";\nvar strict_mode = false;\n";
+            }
             preambleLines = 2;
+
+            if (test.isEarlyError()) {
+                preamble = preamble + "function Early() {} throw new Early();\n";
+                preambleLines += 1;
+            }
         }
         sourceCode = Strings.concat(preamble, fileContent);
 

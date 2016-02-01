@@ -98,6 +98,13 @@ final class Test262Info extends TestInfo {
     }
 
     /**
+     * Returns the expected error stage if any.
+     */
+    public boolean isEarlyError() {
+        return errorStage != null && errorStage.equals("early");
+    }
+
+    /**
      * Returns the list of required includes.
      */
     public List<String> getIncludes() {
