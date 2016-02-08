@@ -68,7 +68,7 @@ final class FindParameter extends DefaultNodeVisitor<BindingIdentifier, Name> {
 
     @Override
     public BindingIdentifier visit(BindingRestElement node, Name value) {
-        return node.getBindingIdentifier().accept(this, value);
+        return node.getBinding().accept(this, value);
     }
 
     @Override

@@ -462,7 +462,10 @@ public final class ReflectParser implements NodeVisitor<Object, Void> {
     private BindingIdentifier getRestParameter(FormalParameterList formals) {
         FormalParameter last = lastElement(formals.getFormals());
         if (last != null && last.getElement() instanceof BindingRestElement) {
-            return ((BindingRestElement) last.getElement()).getBindingIdentifier();
+            Binding b = ((BindingRestElement) last.getElement()).getBinding();
+            if (b instanceof BindingIdentifier) {
+                return (BindingIdentifier) b;
+            }
         }
         return null;
     }
@@ -911,7 +914,7 @@ public final class ReflectParser implements NodeVisitor<Object, Void> {
 
     @Override
     public Object visit(BindingRestElement node, Void value) {
-        Object expr = node.getBindingIdentifier().accept(this, value);
+        Object expr = node.getBinding().accept(this, value);
         if (hasBuilder(Type.SpreadExpression)) {
             return call(Type.SpreadExpression, node, expr);
         }

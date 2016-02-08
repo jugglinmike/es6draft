@@ -5619,8 +5619,8 @@ public final class Parser {
     private BindingRestElement bindingRestElement(boolean allowLet) {
         long begin = ts.beginPosition();
         consume(Token.TRIPLE_DOT);
-        BindingIdentifier identifier = bindingIdentifier(allowLet);
-        return new BindingRestElement(begin, ts.endPosition(), identifier);
+        Binding binding = binding(allowLet);
+        return new BindingRestElement(begin, ts.endPosition(), binding);
     }
 
     /**

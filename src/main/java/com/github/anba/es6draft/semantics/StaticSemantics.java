@@ -171,7 +171,7 @@ public final class StaticSemantics {
             return BoundNames(((BindingElement) element).getBinding());
         }
         if (element instanceof BindingRestElement) {
-            return BoundNames(((BindingRestElement) element).getBindingIdentifier());
+            return BoundNames(((BindingRestElement) element).getBinding());
         }
         assert element instanceof BindingElision;
         return node.accept(BoundNames.INSTANCE, new InlineArrayList<Name>());

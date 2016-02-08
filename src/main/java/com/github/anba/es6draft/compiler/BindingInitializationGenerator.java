@@ -741,7 +741,23 @@ final class BindingInitializationGenerator {
         @Override
         public void visit(final BindingRestElement node,
                 final Variable<? extends Iterator<?>> iterator) {
-            BindingIdentifier identifier = node.getBindingIdentifier();
+            //BindingIdentifier identifier = node.getBindingIdentifier();
+            Binding binding = node.getBinding();
+
+            if (binding instanceof BindingPattern) {
+                /* steps 1-2 */
+                // stack: [ref] -> [ref, array]
+                emitCreateRestArray(node, iterator);
+
+                /* step 3 */
+                // stack: [v'] -> []
+                BindingInitialization((BindingPattern) binding);
+                return;
+            }
+            assert binding instanceof BindingIdentifier;
+
+            BindingIdentifier identifier = (BindingIdentifier) binding;
+
             if (envRec == null) {
                 /* steps 1-2 */
                 // stack: [] -> [ref]
