@@ -10,11 +10,13 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import com.github.anba.es6draft.Script;
 import com.github.anba.es6draft.compiler.CompilationException;
 import com.github.anba.es6draft.parser.ParserException;
 import com.github.anba.es6draft.repl.global.BaseShellFunctions;
 import com.github.anba.es6draft.repl.global.ShellGlobalObject;
 import com.github.anba.es6draft.runtime.Realm;
+import com.github.anba.es6draft.runtime.internal.ScriptCache;
 import com.github.anba.es6draft.runtime.internal.Source;
 import com.github.anba.es6draft.runtime.modules.MalformedNameException;
 import com.github.anba.es6draft.runtime.modules.ModuleLoader;
@@ -47,7 +49,15 @@ public final class Test262GlobalObject extends ShellGlobalObject {
      */
     void include(String file) throws IOException {
         assert !"sta.js".equals(file) : "cannot load sta.js harness file";
-        super.include(Paths.get("harness", file));
+        if ("detachArrayBuffer.js".equals(file)) {
+          Realm realm = getRealm();
+          ScriptCache scriptCache = getRuntimeContext().getScriptCache();
+          Path path = Paths.get("src", "test", "scripts", "test262", file).toAbsolutePath();
+          Script script = scriptCache.get(realm.getScriptLoader(), path);
+          script.evaluate(realm);
+        } else {
+          super.include(Paths.get("harness", file));
+        }
     }
 
     /**
