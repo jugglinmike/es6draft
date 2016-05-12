@@ -312,7 +312,7 @@ final class Test262Info extends TestInfo {
     }
 
     private static final HashSet<String> allowedFlags = new HashSet<>(Arrays.asList("negative",
-            "onlyStrict", "noStrict", "module", "raw", "async"));
+            "onlyStrict", "noStrict", "module", "raw", "async", "generated"));
 
     public static final class TestDescriptor {
         private String description;
